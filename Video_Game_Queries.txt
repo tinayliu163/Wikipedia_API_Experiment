@@ -1,0 +1,45 @@
+#Fetches information about all video games on Wikidata
+
+SELECT ?id ?idLabel ?genreLabel ?publisherLabel ?esrbLabel ?idAltLabel ?name ?article
+WHERE
+{
+  ?id wdt:P31/wdt:P279* wd:Q7889 .
+  OPTIONAL{?id wdt:P136 ?genre .}
+  OPTIONAL{?id wdt:P123 ?publisher .}
+  OPTIONAL{?id wdt:P852 ?esrb .}
+  ?article schema:about ?id.
+  ?article schema:inLanguage "en".
+  ?article schema:name ?name .
+  ?article schema:isPartOf <https://en.wikipedia.org/>.
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+}
+
+#Fetches information about all video games series on Wikidata
+
+SELECT ?id ?idLabel ?genreLabel ?publisherLabel ?esrbLabel ?idAltLabel ?name ?article
+WHERE
+{
+  ?id wdt:P31/wdt:P279* wd:Q7058673 .
+  OPTIONAL{?id wdt:P136 ?genre .}
+  OPTIONAL{?id wdt:P123 ?publisher .}
+  OPTIONAL{?id wdt:P852 ?esrb .}
+  ?article schema:about ?id.
+  ?article schema:inLanguage "en".
+  ?article schema:name ?name .
+  ?article schema:isPartOf <https://en.wikipedia.org/>.
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+}
+
+# Fetches mapping between video game and video game series
+PREFIX schema: <http://schema.org/>
+
+SELECT ?id ?idLabel ?genreLabel ?publisherLabel ?esrbLabel ?idAltLabel ?article
+WHERE
+{
+  ?id wdt:P31/wdt:P279* wd:Q7889 .
+  ?id wdt:P179 ?parent_id .
+  ?article schema:about ?id.
+  ?article schema:inLanguage "en".
+  ?article schema:isPartOf <https://en.wikipedia.org/>.
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+}
